@@ -1,0 +1,9 @@
+{
+    "title" : "Estimation information schema",
+    "type" : "object",
+    "properties" : {
+        'city': 'Unknown',       
+        'adress': 'Unknown',
+    },
+    "required" : ["city"]
+}
