@@ -1,0 +1,13 @@
+{
+    "title" : "Ad schema",
+    "type" : "object",
+    "properties" : {
+        'price': 0.0,
+        'city': 'Unknown',
+        'adress': 'Unknown',
+        'type': 'Unknown',
+        'nbRooms': 0,
+        'surface': 0.0,
+    },
+    "required" : ["price", "city", "type", "surface"]
+}
