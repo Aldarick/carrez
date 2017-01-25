@@ -1,14 +1,12 @@
 {
-    "title" : "Ad schema",
-    "type" : "object",
-    "properties" : {
+    "title": "Ad schema",
+    "type": "object",
+    "properties": {
         'price': 0.0,
         'city': 'Unknown',
-        'adress': 'Unknown',
-        'zipcode' : 00000,
+        'zipcode': 00000,
         'type': 'Unknown',
-        'nbRooms': 0,
         'surface': 0.0,
     },
-    "required" : ["price", "city", "type", "surface"]
-}
+    "required": ["price", "city", "type", "surface"]
+};
