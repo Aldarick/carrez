@@ -5,6 +5,7 @@
         'price': 0.0,
         'city': 'Unknown',
         'adress': 'Unknown',
+        'zipcode' : 00000,
         'type': 'Unknown',
         'nbRooms': 0,
         'surface': 0.0,

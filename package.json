@@ -1,0 +1,12 @@
+{
+  "name"         : "web-scrapper",
+  "version"      : "0.0.1",
+  "description"  : "Steal ALL the informations !",
+  "main"         : "server.js",
+  "author"       : "Aldarick",
+  "dependencies" : {
+    "express"    : "latest",
+    "request"    : "latest",
+    "cheerio"    : "latest"
+  }
+}
