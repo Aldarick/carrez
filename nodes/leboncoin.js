@@ -1,106 +1,82 @@
 var request = require('request');
 var cheerio = require('cheerio');
+var functions = require('functions')
 var fs = require('fs');
 var meilleursagents = require('./meilleursagents');
 
 
+exports.request = function (url, tolerance, res) {
+
+    request(url, function (errorOccured, response, html) {
 
 
-/**
- * Array cleaner utility
- * overwriting array by adding a clean method
- * delete all elements containing the given delete value
- * ex: myArray.clean(undefined).clean('');
- **/
-Array.prototype.clean = function (deleteValue) {
-
-};
-
-function cleanArray(arrayToClean, valueToClean) {
-    for (var i = 0; i < arrayToClean.length; i++) {
-        if (arrayToClean[i] == deleteValue) {
-            // If the value is the one we want to chop off, 
-            // we suppress it from the array
-            arrayToClean.splice(i, 1);
-            
-            // We suppress one element so the ones after it will have their index
-            // decreased by one. 
-            //  i  i+1 i+2 i+3       i  i+1 i+2  i+3       i  i+1 i+2 
-            //| w | x | y | z | -> | w | x | __ | z | -> | w | x | z | 
-            //Since the i variable will get increased, we decreased 
-            // right before it, to avoid missing an element
-            i--;
-        }
-    }
-    return arrayToClean;
-}
-
-
-exports.request = function (url) {
-
-    request(url, function (error, response, html) {
-
-        // First we'll check to make sure no errors occurred when making the request
-
-        if (!error) {
-            // Next, we'll utilize the cheerio library on the returned html which will essentially give us jQuery functionality
+        // Don't process if there was an error
+        if (!errorOccured) {
 
             var $ = cheerio.load(html);
 
-            // Finally, we'll define the variables we're going to capture
-
-            var city, zipcode, price, surface, type;
-            var annonce = {
+            var json = {
                 "title": "Ad schema",
-                "type": "object",
+                "type": "LBC",
                 "properties": {
-                    'price': 0.0,
                     'city': 'Unknown',
+                    'price': 0.0,
                     'zipcode': 00000,
                     'type': 'Unknown',
                     'surface': 0.0,
+                    'href' : "https//nothing.com"
                 },
-                "required": ["price", "city", "type", "surface"]
             };
+            
+            var city, price, zipcode, type, surface;
 
-
+            // Find the price
             $('.properties .line .item_price').each(function () {
                 price = $(this).attr("content");
             });
 
+            // Find the city and the zip code
             $('.line_city .clearfix .value').each(function () {
-                var list = $(this).text().split(' ').clean(undefined).clean('');
-                var list_size = list.length;
-                city = list[0];
-                for (var i = 1; i < list_size - 1; i++) {
-                    city += list[i];
+                var listCleaned = $(this).text().split(' ');
+                var listCleaned = listCleaned.cleanArray(undefined);
+                var listCleaned = listCleaned.cleanArray('');
+                
+                var listSize = list.length;
+                // Replace the problematic characters with a standard e. It will ensure
+                // there's no problem of encoding when parsing the data
+                city = list[0].replace('é', 'e').replace('�', 'e');
+                for (var i = 1; i < listSize - 1; i++) {
+                    city += " " + list[i].replace('é', 'e').replace('�', 'e');
                 }
-                zipcode = parseInt(list[list_size - 1]);
-                console.log("City: " + city + ", ZIP: " + zip);
+                zip = parseInt(list[listSize - 1]);
             });
 
+            // Find the type
             $('.line .clearfix .property').each(function () {
                 if ($(this).text() === 'Type de bien') {
                     type = $(this).next().text();
                 }
             });
 
+            
             $('.line .clearfix .value sup').each(function () {
                 surface = parseInt($(this).parent().text().split(' ')[0]);
+                console.log("Found surface-area: " + surface + " squared meters");
             });
-            
-            annonce.price = price;
-            annonce.city = city;
-            annonce.zipcode = zipcode;
-            annonce.type = type;
-            annonce.surface = surface;
-            
 
-            fs.writeFileSync("./lbc_data.json", JSON.stringify(json));
 
-            console.log("Data stored in ./lbc_data.json");
+            json.properties.zipcode = zipcode;
+            json.properties.city = city;
+            
+            // Parse the price and the surface as float
+            json.properties.price = parseFloat(price);
+            json.properties.surface = parseFloat(surface);
+            
+            json.properties.type = type;
+            json.properties.href = url;
+            
+            fs.writeFileSync("../Json/dataLBC.json", JSON.stringify(json));
         }
-
-        meilleursagents.request();
+        ma_scrap.request(tolerance, res);
     })
 };

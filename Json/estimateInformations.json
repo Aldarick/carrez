@@ -1,9 +1,15 @@
 {
-    "title" : "Estimation information schema",
-    "type" : "object",
-    "properties" : {
-        'city': 'Unknown',       
-        'adress': 'Unknown',
+    "estate": {
+        'city': 'Unknown',
+        'price': 0.0,
+        'zipcode': 00000,
+        'type': 'Unknown',
+        'surface': 0.0,
+        'href': "https//nothing.com",
+        'pricePerSquare': 0.0
     },
-    "required" : ["city"]
+    "averagePricePerSquareHouse": 2665,
+    "averagePricePerSquareFloor": 2519,
+    "hrefMA": "https://www.meilleursagents.com/prix-immobilier/thisWillNotWorkDude",
+    "tolerance": "0.25"
 }

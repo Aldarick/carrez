@@ -1,12 +1,12 @@
 {
     "title": "Ad schema",
-    "type": "object",
+    "type": "LBC",
     "properties": {
-        'price': 0.0,
         'city': 'Unknown',
+        'price': 0.0,
         'zipcode': 00000,
         'type': 'Unknown',
         'surface': 0.0,
+        'href' : "https//nothing.com"
     },
-    "required": ["price", "city", "type", "surface"]
 };
